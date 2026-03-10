@@ -1,0 +1,245 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  BROKER
+  PROCESSOR
+  ADMIN
+}
+
+enum LoanType {
+  FIX_AND_FLIP
+  BRIDGE
+  DSCR_RENTAL
+  NEW_CONSTRUCTION
+}
+
+enum LoanStatus {
+  DRAFT
+  SUBMITTED
+  DOCUMENTS_PENDING
+  UNDER_REVIEW
+  AI_REVIEW_COMPLETE
+  PROCESSOR_REVIEW
+  APPROVED
+  CONDITIONALLY_APPROVED
+  DENIED
+  CLOSED
+  WITHDRAWN
+}
+
+enum DocumentType {
+  PURCHASE_CONTRACT
+  SCOPE_OF_WORK
+  DRIVERS_LICENSE
+  ENTITY_DOCS
+  BANK_STATEMENTS
+  CREDIT_REPORT
+  TITLE_COMMITMENT
+  INSURANCE_DECLARATION
+  APPRAISAL
+  TRACK_RECORD
+  LEASE_AGREEMENT
+  RENT_ROLL
+  PLANS_AND_SPECS
+  CONSTRUCTION_BUDGET
+  CONTRACTOR_LICENSE
+  DRAW_SCHEDULE
+  PROPERTY_PHOTOS
+  OTHER
+}
+
+enum DocumentStatus {
+  PENDING
+  PROCESSING
+  APPROVED
+  FLAGGED
+  REJECTED
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          Role      @default(BROKER)
+  company       String?
+  phone         String?
+  nmls          String?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+  loans    Loan[]
+}
+
+model Loan {
+  id          String     @id @default(cuid())
+  loanNumber  String     @unique @default(cuid())
+  status      LoanStatus @default(DRAFT)
+  loanType    LoanType
+  brokerId    String
+  broker      User       @relation(fields: [brokerId], references: [id])
+
+  // Property Info
+  propertyAddress   String?
+  propertyCity      String?
+  propertyState     String?
+  propertyZip       String?
+  propertyType      String?
+  propertyCondition String?
+
+  // Loan Amounts
+  purchasePrice     Float?
+  rehabBudget       Float?
+  afterRepairValue  Float?
+  requestedLoanAmt  Float?
+  estimatedLtv      Float?
+  estimatedLtc      Float?
+  estimatedArv      Float?
+
+  // DSCR specific
+  monthlyRent       Float?
+  annualNOI         Float?
+  dscrRatio         Float?
+
+  // Borrower Info
+  borrowerName      String?
+  borrowerEmail     String?
+  borrowerPhone     String?
+  borrowerEntity    String?
+  borrowerExperience String?
+
+  // Loan Terms
+  requestedRate     Float?
+  requestedTerm     Int?
+  exitStrategy      String?
+  notes             String?
+
+  // Baseline
+  baselineId        String?
+  baselineExportedAt DateTime?
+  baselineStatus    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  documents   Document[]
+  aiReview    AIReview?
+  activities  LoanActivity[]
+}
+
+model Document {
+  id           String         @id @default(cuid())
+  loanId       String
+  loan         Loan           @relation(fields: [loanId], references: [id], onDelete: Cascade)
+  documentType DocumentType   @default(OTHER)
+  status       DocumentStatus @default(PENDING)
+
+  fileName     String
+  fileSize     Int
+  mimeType     String
+  storageKey   String
+  storageUrl   String?
+
+  // AI Processing
+  aiClassified    Boolean  @default(false)
+  aiSummary       String?
+  aiExtractedData Json?
+  aiFlags         Json?
+  aiConfidence    Float?
+  processedAt     DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AIReview {
+  id     String @id @default(cuid())
+  loanId String @unique
+  loan   Loan   @relation(fields: [loanId], references: [id], onDelete: Cascade)
+
+  // Overall
+  overallScore      Float?
+  overallStatus     String?  // PASS, CONDITIONAL, FAIL
+  summary           String?
+  recommendation    String?
+
+  // Requirements checks
+  ltvCheck          Json?
+  ltcCheck          Json?
+  dscrCheck         Json?
+  documentsCheck    Json?
+  borrowerCheck     Json?
+  propertyCheck     Json?
+
+  // Findings
+  redFlags          Json?
+  conditions        Json?
+  missingDocuments  Json?
+  strengths         Json?
+
+  // Raw AI output
+  rawAnalysis       String?
+  modelUsed         String?
+  tokensUsed        Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LoanActivity {
+  id        String   @id @default(cuid())
+  loanId    String
+  loan      Loan     @relation(fields: [loanId], references: [id], onDelete: Cascade)
+  userId    String?
+  type      String
+  message   String
+  metadata  Json?
+  createdAt DateTime @default(now())
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
