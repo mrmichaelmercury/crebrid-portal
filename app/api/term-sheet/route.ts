@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
-import { calculateTermSheet } from "@/lib/rates";
+import { fetchBaselineRates } from "@/lib/baseline";
 import type { ProjectType, CreditTier, ExperienceTier } from "@/lib/rates";
 
 export async function POST(req: Request) {
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Property values must be greater than zero" }, { status: 400 });
   }
 
-  const result = calculateTermSheet({
+  const result = await fetchBaselineRates({
     projectType,
     asIsValue,
     arv,
