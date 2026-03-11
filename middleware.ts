@@ -1,23 +1,45 @@
 import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import bcrypt from "bcryptjs";
+import { db } from "@/lib/db";
+import { z } from "zod";
 import { authConfig } from "./auth.config";
-import { NextResponse } from "next/server";
 
-export default NextAuth(authConfig).auth((req) => {
-  const { pathname } = req.nextUrl;
-  const isLoggedIn = !!req.auth;
-  const isPublicPath = pathname.startsWith("/login");
-  const isApiAuth = pathname.startsWith("/api/auth");
-
-  if (isApiAuth) return NextResponse.next();
-  if (isPublicPath && isLoggedIn) {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
-  }
-  if (!isPublicPath && !isLoggedIn && !pathname.startsWith("/api")) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
-  return NextResponse.next();
+const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
 });
 
-export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|manifest.json|icon-).*)"],
-};
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  ...authConfig,
+  adapter: PrismaAdapter(db),
+  session: { strategy: "jwt" },
+  providers: [
+    Credentials({
+      async authorize(credentials) {
+        const parsed = loginSchema.safeParse(credentials);
+        if (!parsed.success) return null;
+        
+        const { email, password } = parsed.data;
+        
+        const user = await db.user.findUnique({
+          where: { email: email.toLowerCase() },
+        });
+        
+        if (!user || !user.password) return null;
+        if (!user.isActive) return null;
+        
+        const isValid = await bcrypt.compare(password, user.password);
+        if (!isValid) return null;
+        
+        return { 
+          id: user.id, 
+          email: user.email, 
+          name: user.name, 
+          role: user.role 
+        };
+      },
+    }),
+  ],
+});
