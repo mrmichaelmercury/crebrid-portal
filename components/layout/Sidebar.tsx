@@ -12,6 +12,7 @@ import {
   LogOut,
   Users,
   ChevronRight,
+  ClipboardList,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +28,7 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/loans", label: "My Loans", icon: FileText },
   { href: "/loans/new", label: "New Loan", icon: PlusCircle },
+  { href: "/term-sheet", label: "Term Sheet", icon: ClipboardList },
 ];
 
 const adminNavItems = [

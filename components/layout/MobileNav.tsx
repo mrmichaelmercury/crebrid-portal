@@ -14,6 +14,7 @@ import {
   Settings,
   LogOut,
   Users,
+  ClipboardList,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -29,6 +30,7 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/loans", label: "My Loans", icon: FileText },
   { href: "/loans/new", label: "New Loan", icon: PlusCircle },
+  { href: "/term-sheet", label: "Term Sheet", icon: ClipboardList },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 
