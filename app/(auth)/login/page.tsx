@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Building2, Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { CrebridLogo } from "@/components/ui/CrebridLogo";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -41,7 +42,7 @@ export default function LoginPage() {
       {/* Logo */}
       <div className="mb-8 text-center">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-sm mb-4">
-          <Building2 className="w-8 h-8 text-white" />
+          <CrebridLogo className="w-10 h-10" />
         </div>
         <h1 className="text-3xl font-bold text-white tracking-tight">Crebrid</h1>
         <p className="text-crebrid-300 mt-1 text-sm">Broker Portal</p>

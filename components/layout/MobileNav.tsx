@@ -4,8 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
+import { CrebridLogo } from "@/components/ui/CrebridLogo";
 import {
-  Building2,
   Menu,
   X,
   LayoutDashboard,
@@ -42,9 +42,7 @@ export default function MobileNav({ user }: MobileNavProps) {
       {/* Top bar */}
       <header className="lg:hidden flex items-center justify-between px-4 py-3 bg-white border-b border-gray-200 sticky top-0 z-30">
         <div className="flex items-center gap-2.5">
-          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-crebrid-600">
-            <Building2 className="w-4 h-4 text-white" />
-          </div>
+          <CrebridLogo className="w-8 h-8" />
           <span className="font-bold text-gray-900 text-base">Crebrid</span>
         </div>
         <button
@@ -65,9 +63,7 @@ export default function MobileNav({ user }: MobileNavProps) {
           <div className="fixed inset-y-0 right-0 w-72 bg-white z-50 flex flex-col shadow-xl">
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-crebrid-600">
-                  <Building2 className="w-4 h-4 text-white" />
-                </div>
+                <CrebridLogo className="w-8 h-8" />
                 <span className="font-bold text-gray-900">Crebrid</span>
               </div>
               <button

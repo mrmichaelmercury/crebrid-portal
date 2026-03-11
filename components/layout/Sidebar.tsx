@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
+import { CrebridLogo } from "@/components/ui/CrebridLogo";
 import {
-  Building2,
   LayoutDashboard,
   FileText,
   PlusCircle,
@@ -43,9 +43,7 @@ export default function Sidebar({ user }: SidebarProps) {
     <aside className="hidden lg:flex lg:fixed lg:inset-y-0 lg:left-0 lg:w-64 lg:flex-col bg-white border-r border-gray-200 z-30">
       {/* Logo */}
       <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-100">
-        <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-crebrid-600">
-          <Building2 className="w-5 h-5 text-white" />
-        </div>
+        <CrebridLogo className="w-9 h-9" />
         <div>
           <p className="font-bold text-gray-900 text-sm leading-none">Crebrid</p>
           <p className="text-xs text-gray-500 mt-0.5">Broker Portal</p>
