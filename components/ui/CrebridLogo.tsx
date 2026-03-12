@@ -1,10 +1,10 @@
 export function CrebridLogo({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 36 36" fill="none" className={className}>
-      {/* Left dark diamond */}
-      <polygon points="11,9 20,18 11,27 2,18" fill="#2d2d2d" />
-      {/* Right orange diamond, overlapping left */}
-      <polygon points="24,9 33,18 24,27 15,18" fill="#E06835" />
+      {/* Dark left-pointing chevron (<) */}
+      <polygon points="24,4 14,4 4,18 14,32 24,32 14,18" fill="#1d1d1d" />
+      {/* Orange right-pointing chevron (>) — drawn in front, overlapping */}
+      <polygon points="12,4 22,4 32,18 22,32 12,32 22,18" fill="#E06835" />
     </svg>
   );
 }

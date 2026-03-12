@@ -132,6 +132,97 @@ function Nav() {
   );
 }
 
+// ── Hero graphic ─────────────────────────────────────────────────────────────
+
+function HeroGraphic() {
+  return (
+    <div
+      className="hidden lg:flex items-center justify-center relative"
+      style={{ animation: "fadeSlideUp 0.9s ease-out 0.5s both" }}
+    >
+      {/* Glow behind the card */}
+      <div className="absolute w-72 h-72 rounded-full bg-crebrid-600/20 blur-3xl" />
+
+      {/* Main term sheet card */}
+      <div className="relative z-10 w-80 bg-gray-900/80 backdrop-blur-md border border-white/10 rounded-2xl p-5 shadow-2xl rotate-1 ring-1 ring-white/5">
+
+        {/* Card header */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+            <span className="text-xs font-semibold text-gray-300 uppercase tracking-wider">Term Sheet</span>
+          </div>
+          <span className="text-[10px] bg-crebrid-600/25 text-crebrid-400 px-2 py-0.5 rounded-full border border-crebrid-600/30 font-semibold">
+            White-Labeled
+          </span>
+        </div>
+
+        {/* Divider */}
+        <div className="h-px bg-white/5 mb-4" />
+
+        {/* Property */}
+        <div className="flex items-start justify-between mb-4">
+          <div>
+            <p className="text-white font-semibold text-sm leading-tight">2847 Oak Creek Dr</p>
+            <p className="text-gray-500 text-xs mt-0.5">Dallas, TX 75208</p>
+          </div>
+          <span className="text-[10px] bg-orange-500/15 text-orange-400 border border-orange-500/20 px-2 py-0.5 rounded-full font-semibold whitespace-nowrap">
+            Fix &amp; Flip
+          </span>
+        </div>
+
+        {/* Metrics grid */}
+        <div className="grid grid-cols-2 gap-2 mb-4">
+          {[
+            { label: "Loan Amount", value: "$285,000" },
+            { label: "ARV", value: "$420,000" },
+            { label: "Interest Rate", value: "9.25%" },
+            { label: "Loan Term", value: "12 months" },
+          ].map((m) => (
+            <div key={m.label} className="bg-white/[0.04] rounded-lg px-3 py-2.5 border border-white/5">
+              <p className="text-[10px] text-gray-500 mb-0.5">{m.label}</p>
+              <p className="text-white font-semibold text-sm">{m.value}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Approval status bar */}
+        <div className="flex items-center gap-2.5 bg-green-500/10 border border-green-500/20 rounded-lg px-3 py-2.5">
+          <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center">
+            <Check className="w-3 h-3 text-green-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-green-400 text-xs font-semibold">Pre-Approved</p>
+            <p className="text-gray-500 text-[10px]">Underwritten in-house · Dallas, TX</p>
+          </div>
+          <span className="text-gray-500 text-[10px] flex-shrink-0">18 hrs</span>
+        </div>
+      </div>
+
+      {/* Floating broker fee badge */}
+      <div
+        className="absolute z-20 -bottom-5 -left-6 bg-gray-900 border border-white/10 rounded-xl px-4 py-3 shadow-xl -rotate-2 ring-1 ring-white/5"
+        style={{ animation: "fadeSlideUp 1s ease-out 0.8s both" }}
+      >
+        <p className="text-[10px] text-gray-500 mb-0.5 uppercase tracking-wide">Your Broker Fee</p>
+        <p className="text-white font-bold text-xl leading-none">$8,500</p>
+        <p className="text-crebrid-400 text-[10px] mt-1">Wired at closing</p>
+      </div>
+
+      {/* Floating speed badge */}
+      <div
+        className="absolute z-20 -top-4 -right-4 bg-gray-900 border border-white/10 rounded-xl px-3 py-2 shadow-xl rotate-2 ring-1 ring-white/5"
+        style={{ animation: "fadeSlideUp 1s ease-out 0.7s both" }}
+      >
+        <div className="flex items-center gap-1.5">
+          <Zap className="w-3 h-3 text-crebrid-400" />
+          <p className="text-white text-xs font-semibold">Decision in 24hrs</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Hero ─────────────────────────────────────────────────────────────────────
 
 function Hero() {
@@ -143,55 +234,62 @@ function Hero() {
       </div>
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-20 pb-24 sm:pt-28 sm:pb-32">
-        <div className="max-w-2xl">
-          {/* Badge */}
-          <div
-            className="inline-flex items-center gap-2 bg-crebrid-600/20 border border-crebrid-600/30 text-crebrid-400 text-xs font-semibold px-3 py-1.5 rounded-full mb-6"
-            style={{ animation: "fadeSlideUp 0.6s ease-out both" }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-crebrid-400 animate-pulse" />
-            Hard Money Done Right — Nationwide
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+
+          {/* Left: copy */}
+          <div>
+            {/* Badge */}
+            <div
+              className="inline-flex items-center gap-2 bg-crebrid-600/20 border border-crebrid-600/30 text-crebrid-400 text-xs font-semibold px-3 py-1.5 rounded-full mb-6"
+              style={{ animation: "fadeSlideUp 0.6s ease-out both" }}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-crebrid-400 animate-pulse" />
+              Hard Money Done Right — Nationwide
+            </div>
+
+            {/* Headline */}
+            <h1
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight"
+              style={{ animation: "fadeSlideUp 0.7s ease-out 0.1s both" }}
+            >
+              Your Clients.{" "}
+              <span className="text-crebrid-400">Your Brand.</span>{" "}
+              Our Capital.
+            </h1>
+
+            {/* Subheadline */}
+            <p
+              className="mt-5 text-lg text-gray-400 leading-relaxed max-w-xl"
+              style={{ animation: "fadeSlideUp 0.7s ease-out 0.25s both" }}
+            >
+              Crebrid is the hard money lender that works behind you, not around you.
+              Bring us your deals — we move fast, protect your client relationships,
+              and put a check in your hand at the closing table.
+            </p>
+
+            {/* CTAs */}
+            <div
+              className="mt-8 flex flex-wrap gap-3"
+              style={{ animation: "fadeSlideUp 0.7s ease-out 0.4s both" }}
+            >
+              <a
+                href="mailto:support@crebrid.com?subject=Broker%20Partnership%20Request"
+                className="inline-flex items-center gap-2 bg-crebrid-600 hover:bg-crebrid-500 text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                Apply to Partner
+                <ChevronRight className="w-4 h-4" />
+              </a>
+              <Link
+                href="/login"
+                className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all border border-white/10 hover:scale-[1.02] active:scale-[0.98]"
+              >
+                Log In to Portal
+              </Link>
+            </div>
           </div>
 
-          {/* Headline */}
-          <h1
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight"
-            style={{ animation: "fadeSlideUp 0.7s ease-out 0.1s both" }}
-          >
-            Your Clients.{" "}
-            <span className="text-crebrid-400">Your Brand.</span>{" "}
-            Our Capital.
-          </h1>
-
-          {/* Subheadline */}
-          <p
-            className="mt-5 text-lg text-gray-400 leading-relaxed max-w-xl"
-            style={{ animation: "fadeSlideUp 0.7s ease-out 0.25s both" }}
-          >
-            Crebrid is the hard money lender that works behind you, not around you.
-            Bring us your deals — we move fast, protect your client relationships,
-            and put a check in your hand at the closing table.
-          </p>
-
-          {/* CTAs */}
-          <div
-            className="mt-8 flex flex-wrap gap-3"
-            style={{ animation: "fadeSlideUp 0.7s ease-out 0.4s both" }}
-          >
-            <a
-              href="mailto:support@crebrid.com?subject=Broker%20Partnership%20Request"
-              className="inline-flex items-center gap-2 bg-crebrid-600 hover:bg-crebrid-500 text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
-            >
-              Apply to Partner
-              <ChevronRight className="w-4 h-4" />
-            </a>
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all border border-white/10 hover:scale-[1.02] active:scale-[0.98]"
-            >
-              Log In to Portal
-            </Link>
-          </div>
+          {/* Right: graphic */}
+          <HeroGraphic />
         </div>
       </div>
 
