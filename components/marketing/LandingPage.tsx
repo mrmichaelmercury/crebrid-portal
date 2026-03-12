@@ -150,7 +150,7 @@ function Hero() {
             style={{ animation: "fadeSlideUp 0.6s ease-out both" }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-crebrid-400 animate-pulse" />
-            Hard Money Done Right — Dallas, TX
+            Hard Money Done Right — Nationwide
           </div>
 
           {/* Headline */}
