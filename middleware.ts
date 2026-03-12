@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export default NextAuth(authConfig).auth((req) => {
   const { pathname } = req.nextUrl;
   const isLoggedIn = !!req.auth;
-  const isPublicPath = pathname.startsWith("/login");
+  const isPublicPath = pathname === "/" || pathname.startsWith("/login");
   const isApiAuth = pathname.startsWith("/api/auth");
 
   if (isApiAuth) return NextResponse.next();
