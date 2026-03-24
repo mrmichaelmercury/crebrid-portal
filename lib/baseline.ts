@@ -6,12 +6,15 @@
  * at support@baselinesoftware.com to request API credentials and docs.
  *
  * This module provides:
- * 1. Data export in Baseline-compatible format
- * 2. REST API sync (when Baseline API key is configured)
- * 3. CSV export as fallback for manual import
+ * 1. Pricing engine — fetchBaselineRates() (delegates to local calculator until API is live)
+ * 2. Data export in Baseline-compatible format
+ * 3. REST API sync (when Baseline API key is configured)
+ * 4. CSV export as fallback for manual import
  */
 
 import type { Loan, Document, AIReview } from "@prisma/client";
+import { calculateTermSheet } from "@/lib/rates";
+import type { RateInput, TermSheetData } from "@/lib/rates";
 
 const BASELINE_API_URL = process.env.BASELINE_API_URL;
 const BASELINE_API_KEY = process.env.BASELINE_API_KEY;
@@ -174,6 +177,69 @@ export function exportLoanToCSV(loan: LoanWithAll): string {
 
   return `${headers}\n${values}`;
 }
+
+// ─── Pricing Engine ───────────────────────────────────────────────────────────
+
+/**
+ * Fetch rates from Baseline's pricing matrix.
+ *
+ * TO INTEGRATE:
+ *   1. Set BASELINE_API_KEY, BASELINE_API_URL, BASELINE_LENDER_ID in .env
+ *   2. Get the exact request/response schema from Baseline support
+ *   3. Replace the commented block below with the real fetch — the function
+ *      signature and return type do not change, so nothing else needs to move.
+ */
+export async function fetchBaselineRates(input: RateInput): Promise<TermSheetData> {
+  if (isBaselineConfigured) {
+    // ── Real Baseline pricing call (uncomment + fill in schema once confirmed) ──
+    //
+    // const res = await fetch(`${BASELINE_API_URL}/api/v1/pricing/quote`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${BASELINE_API_KEY}`,
+    //     "X-Lender-ID": BASELINE_LENDER_ID!,
+    //   },
+    //   body: JSON.stringify({
+    //     // Map RateInput → Baseline's field names once we have the schema
+    //     loanProgram:        input.projectType,
+    //     propertyState:      input.state,
+    //     asIsValue:          input.asIsValue,
+    //     afterRepairValue:   input.arv,
+    //     creditScore:        input.creditTier,
+    //     borrowerExperience: input.experience,
+    //     cashOut:            input.cashOut,
+    //     brokerFee:          input.brokerFee,
+    //     thirdPartyCosts:    input.thirdPartyCosts,
+    //   }),
+    // });
+    //
+    // if (!res.ok) throw new Error(`Baseline pricing error ${res.status}: ${await res.text()}`);
+    //
+    // const data = await res.json();
+    //
+    // // Map Baseline's response → TermSheetData (field names TBD from docs)
+    // return {
+    //   estimatedRate:              data.rate,
+    //   points:                     data.originationPoints,
+    //   maxLoanAmount:              data.loanAmount,
+    //   ltvPercent:                 data.ltv,
+    //   term:                       data.termMonths,
+    //   monthlyPayment:             data.monthlyPayment,
+    //   originationFee:             data.originationFee,
+    //   brokerFee:                  input.brokerFee,
+    //   thirdPartyCosts:            input.thirdPartyCosts,
+    //   totalEstimatedClosingCosts: data.totalClosingCosts,
+    //   programLabel:               data.programName,
+    // };
+    // ─────────────────────────────────────────────────────────────────────────
+  }
+
+  // Fallback: local placeholder rate calculator
+  return calculateTermSheet(input);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 function flattenObject(
   obj: Record<string, unknown>,
