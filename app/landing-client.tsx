@@ -98,7 +98,7 @@ function TermSheetCard() {
 
     TERM_FIELDS.forEach((_, i) => {
       const t = setTimeout(
-        () => setLocked((prev) => new Set([...prev, i])),
+        () => setLocked((prev) => new Set([...Array.from(prev), i])),
         400 + i * 320
       );
       timers.current.push(t);
