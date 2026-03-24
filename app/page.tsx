@@ -1,12 +1,9 @@
-import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import LandingPage from "@/components/marketing/LandingPage";
+import { redirect } from "next/navigation";
+import LandingClient from "./landing-client";
 
 export default async function RootPage() {
   const session = await auth();
-  if (session?.user) {
-    redirect("/dashboard");
-  }
-
-  return <LandingPage />;
+  if (session?.user) redirect("/dashboard");
+  return <LandingClient />;
 }

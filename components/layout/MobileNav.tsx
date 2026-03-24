@@ -4,8 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { CrebridLogo } from "@/components/ui/CrebridLogo";
 import {
+  Building2,
   Menu,
   X,
   LayoutDashboard,
@@ -14,7 +14,6 @@ import {
   Settings,
   LogOut,
   Users,
-  ClipboardList,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -30,7 +29,6 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/loans", label: "My Loans", icon: FileText },
   { href: "/loans/new", label: "New Loan", icon: PlusCircle },
-  { href: "/term-sheet", label: "Term Sheet", icon: ClipboardList },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 
@@ -44,7 +42,9 @@ export default function MobileNav({ user }: MobileNavProps) {
       {/* Top bar */}
       <header className="lg:hidden flex items-center justify-between px-4 py-3 bg-white border-b border-gray-200 sticky top-0 z-30">
         <div className="flex items-center gap-2.5">
-          <CrebridLogo className="w-8 h-8" />
+          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-crebrid-600">
+            <Building2 className="w-4 h-4 text-white" />
+          </div>
           <span className="font-bold text-gray-900 text-base">Crebrid</span>
         </div>
         <button
@@ -65,7 +65,9 @@ export default function MobileNav({ user }: MobileNavProps) {
           <div className="fixed inset-y-0 right-0 w-72 bg-white z-50 flex flex-col shadow-xl">
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <CrebridLogo className="w-8 h-8" />
+                <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-crebrid-600">
+                  <Building2 className="w-4 h-4 text-white" />
+                </div>
                 <span className="font-bold text-gray-900">Crebrid</span>
               </div>
               <button
